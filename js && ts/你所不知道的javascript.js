@@ -186,10 +186,9 @@ var reverseList = function (head) {
     return pre;
 }
 
+reverseList(link.head);
 // 链表的区间反转
 
-
-reverseList(link.head);
 
 // 根据对象转类型的特性描述a使 a == 1 && a == 2
 
@@ -359,25 +358,87 @@ Array.prototype.selfReduce = function (callbackFn, initialVaule) {
     if (Object.prototype.toString.call(callbackFn) != "[object Function]") {
         throw new TypeError(callbackfn + ' is not a function')
     }
-    let o = Object(this);
+    let O = Object(this);
     const len = O.length >>> 0;
     let k = 0;
     let accumulator = initialVaule;
-    if (accumulator === undefined) {
+    // 如果没有手动设置初始值, 则获取该数组中第一个有效值来作为初始值
+    find_initial: if (accumulator === undefined) {
         for (; k < len; k++) {
             if (k in O) {
                 accumulator = O[k];
                 k++;
-                break
+                break find_initial; // 需要使用指定的中断
             }
         }
         // 循环结束还没退出, 就表示数组全为空
         throw new Error('Each element of the array is empty');
     }
-    for (;k<len;k++) {
+    // 如果设置了初始值, 则从0开始循环
+    // 如果没设置初始值, 则从自动获取的初始值后开始循环
+    for (; k < len; k++) {
         if (k in O) {
             accumulator = callbackFn.call(undefined, accumulator, O[k], O);
         }
     }
+    return accumulator;
 }
 
+// cumulator (acc) (累计器)
+// Current Value (cur) (当前值)
+// Current Index (idx) (当前索引)
+// Source Array (src) (源数组)
+
+// 改写数组的reduce方法
+Array.prototype.selfReduce2 = function (callbackFn, initialVaule) {
+    if (this === null || this === undefined) {
+        throw new TypeError("Cannot read property 'reduce' of null or undefined");
+    }
+    // 处理回调类型异常
+    if (Object.prototype.toString.call(callbackFn) != "[object Function]") {
+        throw new TypeError(callbackfn + ' is not a function')
+    }
+    const len = this.length;
+    const thisArg = this;
+    let k = 0; // 初始值的位置
+    // 获取初始值
+    // 命名该if以便中断
+    find_initial: if (initialVaule === undefined) {
+        for (var i = 0; i < len; i++) {
+            if (thisArg[i]) {
+                initialVaule = thisArg[i];
+                k = i;
+                break find_initial; // 中断该if语句中的执行
+            }
+        }
+        // 如果for循环执行完毕却没找到有效的初始值, 则抛出错误中断执行
+        throw new TypeError('Each element of the array is empty')
+    }
+    let accumulator = initialVaule; // 将初始值赋予累加器
+    for (var i = k; i < len; i++) {
+        accumulator = callbackFn.call(this, accumulator, thisArg[i], thisArg);
+    }
+    return accumulator;
+}
+
+// 改写数组的filter方法
+
+Array.prototype.selfFilter = function (callbackFn, thisArg) {
+    // 处理数组类型异常
+    if (this === null || this === undefined) {
+        throw new TypeError("Cannot read property 'filter' of null or undefined");
+    }
+    // 处理回调类型异常
+    if (Object.prototype.toString.call(callbackFn) != "[object Function]") {
+        throw new TypeError(callbackFn + ' is not a function')
+    }
+    let O = this;
+    const len = this.length;
+    let arr = [];
+    for (var i = 0; i < len; i++) {
+        if (callbackFn.call(thisArg, O[i], i, O)) {
+            arr.push(O[i]);
+        }
+    }
+    return arr;
+}
