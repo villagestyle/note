@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="box">
+        <div class="item1">1</div>
+        <div class="item2">2</div>
+        <div class="item3">3</div>
+        <div class="item4">4</div>
+        <div class="item5">5</div>
+        <div class="item6">6</div>
+        <div class="item7">7</div>
+        <div class="item8">8</div>
+        <div class="item9">9</div>
+    </div>
+</body>
+<style>
+    .box {
+        width: 40%;
+        display: grid;
+        border: 1px dotted #bbb;
+        /* display: inline-grid;  */
+        /* grid-template-columns: repeat(3, 100px);
+        grid-template-rows: 100px 100px 100px; */
+        /* grid-template-columns: repeat(2, 100px 20px 80px); */
+        /* grid-template-columns: repeat(auto-fill, 100px);  */
+        /* 如果希望每一行（或每一列）容纳尽可能多的单元格，这时可以使用auto-fill关键字,
+        以上表示自动填充表示每列宽度100px，然后自动填充，直到容器不能放置更多的列。 */
+        /* grid-template-columns: 100px 1fr 1.5fr;
+        上面代码表示，第一列的宽度为150像素，第二列的宽度是第三列的一半。 */
+        /* grid-template-columns: 1fr 2fr minmax(100px, 2fr); 
+        minmax()函数产生一个长度范围，表示长度就在这个范围之中。它接受两个参数，分别为最小值和最大值。*/
+        /* grid-template-columns: 100px 100px auto; */
+        /* grid-template-columns: 70% 30%; */
+        grid-template-columns: repeat(3, 1fr);
+        /* grid-row-gap: 5%;  */
+        /* 更新为 row-gap */
+        /* 上下间距 行间距 */
+        grid-column-gap: 5%; 
+        /* 左右间距 列间距 */
+        /* grid-template-columns: 100px 100px 100px;
+        grid-template-rows: 100px 100px 100px;
+        grid-template-areas: "header . header"
+            "main main sidebar"
+            "footer footer footer"; */
+        /* grid-auto-flow: column; */
+        /* 元素的排列方向 */
+        grid-auto-flow: row dense;
+        /* row dense，表示"先行后列"，并且尽可能紧密填满，尽量不出现空格 */
+        /* column dense，表示"先列后行"，并且尽量填满空格。 */
+    }
+
+    .box div {
+        text-align: center;
+        line-height: 50px;
+        border: 1px dotted #bbb;
+        background-color: #bbb;
+    }
+    /* .item1 {
+        grid-column-start: 1;
+        grid-column-end: 4;
+    }
+    .item2 {
+        grid-column-start: 1;
+        grid-column-end: 4;
+    } */
+</style>
+
+</html>

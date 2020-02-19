@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="input">
+    <p></p>
+</body>
+<script>
+    var eleInput = document.getElementById('input');
+    var eleP = document.querySelector('p');
+
+    var obj = {}
+    let modalText = '';
+    Object.defineProperty(obj, 'text', {
+        get: function () {
+            return modalText
+        },
+        set: function (val) {
+            eleP.innerText = val;
+            modalText = val;
+        }
+    })
+
+    eleInput.oninput = function inputHandle(e) {
+        obj.text = eleInput.value;
+    }
+
+    setTimeout(() => {
+        obj = {
+            text: 55
+        }
+    }, 1000)
+
+
+</script>
+
+</html>

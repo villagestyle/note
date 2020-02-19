@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="eleInput" type="number">
+    <p>
+        <span>展示</span>
+        <span id="eleSpan"></span>
+    </p>
+    <input type="text" id="eleInput2" type="number">
+    <p>
+        <span>展示</span>
+        <span id="eleSpan2"></span>
+    </p>
+    <script>
+        var eleInput = document.getElementById('eleInput');
+        var eleSpan = document.getElementById('eleSpan');
+        var eleInput2 = document.getElementById('eleInput2');
+        var eleSpan2 = document.getElementById('eleSpan2');
+        var data = {
+            number: '',
+            arr: [1, 2, 3, 4, 5],
+            obj: {
+                key: 1,
+                name: 'ZZ'
+            }
+        };
+        var listener = new Proxy(data, {
+            get: (target, name, rece) => {
+                console.log('get');
+                console.log(target);
+                console.log(name);
+                console.log(rece); // 接收者
+                return target['name'] ? target['name'] : '';
+            },
+            set: (target, name, newval, rece) => {
+                console.log('set');
+                console.log(target);
+                console.log(name);
+                console.log(newval);
+                console.warn(rece)
+                if (name == 'number') {
+                    if ((newval + '').length > 6) {
+                        eleInput.value = target['number'];
+                        eleSpan.innerText = target['number'];
+                        return;
+                    }
+                    target[name] = newval;
+                    eleSpan.innerText = target['number'];
+                    eleInput.value = target['number'];
+                    return true;
+                } else {
+                    target['obj']['key'] = newval.key;
+                    eleSpan2.innerText = target['obj']['key'];
+                    eleInput2.value = target['obj']['key'];
+                }
+            }
+        })
+        eleInput.oninput = function (e) {
+            listener.number = e.target.value;
+        }
+        eleInput2.oninput = function (e) {
+            listener.obj = {
+                key: e.target.value
+            };
+        }
+        setTimeout(() => {
+            listener.number = 666;
+        }, 2000)
+    </script>
+</body>
+
+</html>
