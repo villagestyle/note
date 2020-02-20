@@ -51,3 +51,109 @@ var pivotIndex = function (nums) {
 };
 
 pivotIndex(nums)
+
+/****
+ * 4. 给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。
+ * 如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。
+ * 您可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+ */
+// var l1 = {
+//     val: 5,
+//     next: null
+// }
+// var l2 = {
+//     val: 5,
+//     next: null
+// }
+// var l1 = {
+//     val: 2,
+//     next: {
+//         val: 4,
+//         next: {
+//             val: 3,
+//             next: null
+//         }
+//     }
+// }
+// var l2 = {
+//     val: 5,
+//     next: {
+//         val: 6,
+//         next: {
+//             val: 4,
+//             next: null
+//         }
+//     }
+// }
+// var l1 = {
+//     val: 1,
+//     next: null
+// }
+// var l2 = {
+//     val: 9,
+//     next: {
+//         val: 9,
+//         next: null
+//     }
+// }
+
+// 执行用时 :156 ms, 在所有 JavaScript 提交中击败了16.61%的用户
+// 内存消耗 :41.9 MB, 在所有 JavaScript 提交中击败了6.14%的用户
+var addTwoNumbers = function (l1, l2) {
+    function Node(data) {
+        this.val = data;
+        this.next = null;
+    }
+    let fir = 0;
+    let link = null;
+    let head = null;
+    let carry = 0;
+    let cur = null;
+    while (l1.val !== null || l2.val !== null) {
+        let sum = l1.val + l2.val + (carry === 1 ? carry : 0);
+        if (sum > 9) {
+            sum = sum % 10;
+            carry = 2;
+        }
+        cur = new Node(sum);
+        if (fir === 0) {
+            link = cur;
+            head = link;
+            fir++;
+        } else {
+            link.next = cur;
+            link = link.next;
+        }
+
+        if (carry === 2 && (!l1.next) && (!l2.next)) {
+            l1 = new Node(0);
+            l2 = new Node(0);
+        } else {
+            l1 = l1.next ? l1.next : new Node(null);
+            l2 = l2.next ? l2.next : new Node(null);
+        }
+        carry--;
+    }
+    return head;
+};
+addTwoNumbers(l1, l2);
+
+// 使用递归法
+var l1 = {
+    val: 5,
+    next: null
+}
+var l2 = {
+    val: 5,
+    next: null
+}
+var addTwoNumbers = function (l1, l2) {
+    
+}
+addTwoNumbers(l1, l2);
+
+/***
+ * 1. 是新建递归函数还是将整个进行递归
+ * 2. 递归返回的值是什么
+ * 3. 怎么链接链表
+ */
