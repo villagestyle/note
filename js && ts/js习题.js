@@ -148,7 +148,7 @@ var l2 = {
     next: null
 }
 var addTwoNumbers = function (l1, l2) {
-    
+    // 未解
 }
 addTwoNumbers(l1, l2);
 
@@ -157,3 +157,50 @@ addTwoNumbers(l1, l2);
  * 2. 递归返回的值是什么
  * 3. 怎么链接链表
  */
+
+
+/***
+ * 1. c
+ * 2. a
+ * 3. b
+ * 4. b
+ * 5. b
+ * Flash提供了ExternalInterface接口与JavaScript通信
+ * 两个方法：call和addCallback
+ * 作用：call让Flash调用js里的方法，addCallback是用来注册flash函数让js调用
+ * 6. b
+ * 7. a
+ * 8. b
+ * 9. b
+ * 10. a
+ * 11. a
+ * 12. c
+ * 13. a
+ * 14. b
+ * 15. c
+ * 16. b 错
+ *  浏览器有两种呈现模式：标准模式和混杂模式（quirks mode）。在标准模式中，浏览器根据规范呈现页面；在混杂模式中，页面以一种比较宽松的向后兼容的方式显示。 c
+ * 17. b
+ * 18. c/b
+ * 19. d
+ * 20. d c
+ */
+
+
+//  5. 找出数组中重复的数字。
+//  在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字。
+
+var arr = [2, 3, 1, 0, 2, 5, 3];
+var findRepeatNumber = function (nums) {
+    var set = new Set();
+    for (var i = 0; i < nums.length; i++) {
+        var val = nums[i];
+        if (set.has(val)) {
+            return val;
+        } else {
+            set.add(val)
+        }
+    }
+};
+
+findRepeatNumber(arr);
