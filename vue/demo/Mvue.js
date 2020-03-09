@@ -2,12 +2,16 @@ class MVue {
     $options;
     $data;
     data;
+    dep;
 
     constructor(options) {
         this.$options = options;
         this.$data = options.data;
         this.data = options.data;
         this.observe(this.$data); // 绑定为响应式数据
+
+        // 模拟watcher创建
+        new Watcher();
     }
 
     observe(value) {
@@ -25,17 +29,21 @@ class MVue {
         if (typeof val === 'object') {
             this.observe(val); // 递归数据来实现每个数据的响应式
         }
+        const dep = new Dep()
 
         Object.defineProperty(obj, key, {
             get() {
+                Dep.target && dep.addDep(Dep.target); // 添加依赖
                 return val;
             },
-            set(newValue) {
+            set: (newValue) => {
                 if (newValue === val) {
                     return;
                 }
+                this.observe(newValue);
                 val = newValue;
-                console.log(key + '属性更新,' + '更新为' +  val);
+                dep.notify();
+                console.log(key + '属性更新,' + '更新为' + val);
             }
         })
     }
@@ -59,11 +67,13 @@ class Dep {
     }
 }
 
-// watcher 用来做具体更新的函数
+// watcher 监视器、观察者负责更新视图
 class Watcher {
     constructor() {
-        // 将当前的watcher实例指定到dep静态属性target 目前只是用来和dep通信
-        Dep.tarfet = this;
+        // 将当前的watcher实例指定到dep静态属性target
+        Dep.target = this;
+        console.log('执行初始化watcher');
+        console.log(this);
     }
 
     update() {
