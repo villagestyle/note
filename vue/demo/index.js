@@ -57,21 +57,45 @@ class Compile {
             // console.log(attr);
             const { name, value } = attr;
             // 判断是否为内部定义的指令
-            if (this.isDirective(name)) {
+            if (this.isDirective(name)) { // v-bind :xxx
                 // 是内部指令(对指令进行分别操作)
-                const [, dirctive] = name.split('-'); // model, text...
+                const [, dirctive] = name.split('-'); // model, text, bind:xxx, :xxx...
                 const [dirName, eventName] = dirctive.split(':'); // 指令名, 事件名
+                // 更新视图, 数据驱动视图
                 compileUtil[dirName](node, value, this.vm, eventName);
+                // 删除有指令的标签上的属性
+                node.removeAttribute('v-' + dirctive);
+            } else if (this.isEventName(name)) {
+                const [, eventName] = name.split('@');
+                compileUtil['on'](node, value, this.vm, eventName);
+                node.removeAttribute('@' + eventName);
+            } else if (this.isBind(name)) {
+                const [, attrName] = name.split(':'); // 指令名, 事件名
+                compileUtil['bind'](node, value, this.vm, attrName);
+                node.removeAttribute(name);
             }
         })
     }
 
     compileText(node) {
         // 编译文本
+        const content = node.textContent;
+        // 筛选出模板语句{{}}
+        if (/\{\{(.+?)\}\}/.test(content)) {
+            compileUtil['text'](node, content, this.vm);
+        }
     }
 
     isDirective(attrName) {
         return attrName.startsWith('v-');
+    }
+
+    isEventName(attrName) {
+        return attrName.startsWith('@');
+    }
+
+    isBind(attrName) {
+        return attrName.startsWith(':');
     }
 }
 
@@ -82,6 +106,7 @@ class Mvue {
         this.$options = options; // 备份数据
         if (this.$el) {
             // 1. 实现一个数据的观察者 observer
+            new Observer(this.$data);
             // 2. 实现一个指令的解析器 compile
             new Compile(this.$el, this);
         }
@@ -97,25 +122,51 @@ const compileUtil = {
         }, vm.$data)
     },
     text(node, expr, vm) {
-        const value = this.getVal(expr, vm);
-        this.updater.textUpdateTer(node, value);
+        let value;
+        if (expr.indexOf('{{') !== -1) {
+            // 模板语句
+            // str.replace(regexp|substr, newSubStr|function)
+            // function: 一个用来创建新子字符串的函数，该函数的返回值将替换掉第一个参数匹配到的结果。
+            // 参数 1. 匹配到的子串 2. 被匹配(过滤)后的值 3. 匹配到子串的位置 4. 源字符串
+            value = expr.replace(/\{\{(.+?)\}\}/g, (...args) => {
+                return this.getVal(args[1].trim(), vm)
+            })
+        } else {
+            value = this.getVal(expr, vm);
+        }
+        this.updater.textUpdater(node, value);
     },
     html(node, expr, vm) {
         const value = this.getVal(expr, vm);
-        this.updater.htmlUpdateTer(node, value);
+        this.updater.htmlUpdater(node, value);
+        new Watcher(vm, expr, (newVal) => {
+            this.updater.htmlUpdater(node, newVal);
+        });
     },
     model(node, expr, vm) {
-
+        const value = this.getVal(expr, vm);
+        this.updater.modelUpdater(node, value);
     },
     on(node, expr, vm, eventName) {
-
+        let fn = vm.$options.methods && vm.$options.methods[expr];
+        if (typeof fn !== 'function') {
+            throw new Error('当前绑定的不是函数');
+        }
+        node.addEventListener(eventName, fn, false);
+    },
+    bind(node, expr, vm, attrName) {
+        const value = this.getVal(expr, vm);
+        node.setAttribute(attrName, value);
     },
     updater: {
-        textUpdateTer(node, value) {
+        textUpdater(node, value) {
             node.textContent = value;
         },
-        htmlUpdateTer(node, value) {
+        htmlUpdater(node, value) {
             node.innerHTML = value;
+        },
+        modelUpdater(node, value) {
+            node.value = value;
         }
     }
 }

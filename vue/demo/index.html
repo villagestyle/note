@@ -11,11 +11,10 @@
 <body>
 
     <div id="app">
-        <h2>
-            {{ person.name }} - {{ person.age }}
+        <h2>{{ person.name }} - {{ person.age }}
         </h2>
         <h3>
-            {{ person.fav }}
+            {{ person.fav.b }}
         </h3>
         <ul>
             <li>1</li>
@@ -28,7 +27,11 @@
         <div v-text="person.fav.a.foo"></div>
         <div v-html="htmlStr"></div>
         <input type="text" v-model="msg">
+        <button @click="handleClick">点击</button>
+        <input :type="type">
+        <input v-bind:type="type">
     </div>
+    <script src="./Observer.js"></script>
     <script src="./index.js"></script>
     <script src=""></script>
     <script>
@@ -39,14 +42,21 @@
                     name: '老王',
                     age: 18,
                     fav: {
+                        b: 555,
                         a: {
                             foo: 111
                         }
                     }
                 },
                 msg: '源码解析',
-                htmlStr: '<strong>55</strong>'
+                htmlStr: '<strong>55</strong>',
+                type: 'number'
             },
+            methods: {
+                handleClick() {
+                    console.log(this);
+                }
+            }
         })
     </script>
 </body>
