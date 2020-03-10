@@ -42,7 +42,6 @@ class MVue {
                 }
                 this.observe(newValue);
                 val = newValue;
-                dep.notify();
                 console.log(key + '属性更新,' + '更新为' + val);
             }
         })
@@ -78,5 +77,53 @@ class Watcher {
 
     update() {
         console.log('更新了');
+    }
+}
+
+/**
+ * 用法 new compile(el, vm) el是要遍历的元素， vm是vue的实例
+ */
+class Compile {
+    // el有可能是一个选择器也有可能是一个字符串也有可能是dom，这里只考虑选择器
+    $el;
+    $vm;
+    constructor(el, vm) {
+        // 遍历宿主对象
+        this.$el = document.querySelector(el);
+        this.$vm = vm; // 保存一个成员变量方便一会儿使用
+
+        if (this.$el) {
+            // 转换内部内容为代码片段
+        }
+    }
+
+    // 将宿主元素中的代码片段拿出来遍历，这样做比较高效，这是一个性能上的考虑
+    node2Fragment(el) {
+        const frag = document.createDocumentFragment(); // 创建一个代码片段
+        let child = el.firstChild;
+        while (child) { // appendChild会将之前el中所有的元素搬走
+            frameElement.appendChild(child);
+            child = el.firstChild
+        }
+        // 将el中的元素全部转换到代码片段中
+        return frag;
+    }
+
+    compile(el) {
+        const childNodes = el.childNodes;
+        Array.from(childNodes).forEach(ele => { // 遍历片段来检查类型做对应的操作
+            // 类型判断
+            if (this.isElement(ele)) {
+                // 元素
+                // console.log('编译元素' + ele.nodeName);
+            } else if (this.isInterpolation(ele)) {
+                // 插值
+                this.compileText(ele);
+            }
+            // 递归子节点
+            if (ele.childNodes && ele.childNodes.length > 0) {
+                this.compile(ele)
+            }
+        })
     }
 }
