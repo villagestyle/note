@@ -109,6 +109,20 @@ class Mvue {
             new Observer(this.$data);
             // 2. 实现一个指令的解析器 compile
             new Compile(this.$el, this);
+            // 设置代理
+            this.proxyData(this.$data);
+        }
+    }
+    proxyData(data) {
+        for(const key in data) {
+            Object.defineProperty(this, key, {
+                get: () => {
+                    return data[key];
+                },
+                set: (newVal) => {
+                    data[key] = newVal;
+                }
+            })
         }
     }
 }
@@ -121,6 +135,22 @@ const compileUtil = {
             return data[curData];
         }, vm.$data)
     },
+    setVal(expr, vm, newVal) {
+        console.log('expr', expr); // person.name
+        const arr = expr.split('.');
+        return arr.reduce((data, curData) => {
+            if (curData === arr[arr.length-1]) {
+                data[curData] = newVal;
+            } else {
+                return data[curData]
+            }
+        }, vm.$data)
+    },
+    getContentVal(expr, vm) {
+        return expr.replace(/\{\{(.+?)\}\}/g, (...args) => {
+            return this.getVal(args[1].trim(), vm)
+        })
+    },
     text(node, expr, vm) {
         let value;
         if (expr.indexOf('{{') !== -1) {
@@ -129,16 +159,25 @@ const compileUtil = {
             // function: 一个用来创建新子字符串的函数，该函数的返回值将替换掉第一个参数匹配到的结果。
             // 参数 1. 匹配到的子串 2. 被匹配(过滤)后的值 3. 匹配到子串的位置 4. 源字符串
             value = expr.replace(/\{\{(.+?)\}\}/g, (...args) => {
+                // 为每个模板语句都添加观察者
+                new Watcher(vm, args[1].trim(), () => {
+                    // 重新编译整条数据
+                    this.updater.textUpdater(node, this.getContentVal(expr, vm));
+                });
                 return this.getVal(args[1].trim(), vm)
             })
         } else {
             value = this.getVal(expr, vm);
+            new Watcher(vm, expr, (newVal) => {
+                this.updater.textUpdater(node, newVal);
+            });
         }
         this.updater.textUpdater(node, value);
     },
     html(node, expr, vm) {
         const value = this.getVal(expr, vm);
         this.updater.htmlUpdater(node, value);
+        // 绑定观察者，将来数据发生变化 触发此处的回调进行更新
         new Watcher(vm, expr, (newVal) => {
             this.updater.htmlUpdater(node, newVal);
         });
@@ -146,6 +185,16 @@ const compileUtil = {
     model(node, expr, vm) {
         const value = this.getVal(expr, vm);
         this.updater.modelUpdater(node, value);
+        // 绑定更新函数 数据驱动试图
+        new Watcher(vm, expr, (newVal) => {
+            this.updater.modelUpdater(node, newVal);
+        });
+        // 视图更新数据再更新视图
+        node.addEventListener('input', (e) => {
+            const newVal = e.target.value;
+            // 设置值
+            this.setVal(expr, vm, newVal);
+        })
     },
     on(node, expr, vm, eventName) {
         let fn = vm.$options.methods && vm.$options.methods[expr];
