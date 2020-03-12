@@ -22,6 +22,7 @@ class Observer {
         Object.defineProperty(data, key, {
             get: () => {
                 // 订阅数据变化时, 往Dep中添加观察者
+                console.log('初始化数据');
                 Dep.target && dep.addDep(Dep.target);
                 return value;
             },
@@ -69,8 +70,9 @@ class Watcher {
 
     // 取旧值
     getOldVal() {
+        console.log(this);
         Dep.target = this;
-        const oldVal = compileUtil.getVal(this.expr, this.vm);3
+        const oldVal = compileUtil.getVal(this.expr, this.vm); // 触发了get方法, 将watcher放入deps中
         Dep.target = null;
         return oldVal;
     }

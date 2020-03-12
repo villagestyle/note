@@ -69,3 +69,16 @@ export default class MVue {
         })
     }
 }
+
+/**
+ * vue是采用数据劫持配合发布者-订阅者模式的方式， 通过
+ * Object.defineProperty()来劫持各个属性的setter和getter，
+ * 在数据发生变化的时候发送通知给依赖收集器，去通知观察者做出
+ * 对应的回调函数，去更新视图
+ * 
+ * mvvm作为绑定的入口，整合了Observer类，Compile类和
+ * Watchers三者， 通过observer来监听数据变化，通过compile
+ * 来解析模板指令，最终利用watcher作为中间通信的桥梁，达到
+ * 数据变化影响视图更新，视图交互影响数据更新的双向绑定的效果
+ * 
+ */

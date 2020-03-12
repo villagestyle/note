@@ -26,6 +26,8 @@
         <div v-text="msg"></div>
         <div v-text="person.fav.a.foo"></div>
         <div v-html="htmlStr"></div>
+        <div v-html="htmlStr"></div>
+        <input type="text" v-model="person.name">
         <input type="text" v-model="msg">
         <button @click="handleClick">点击</button>
         <input :type="type">
