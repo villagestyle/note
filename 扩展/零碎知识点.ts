@@ -1,20 +1,24 @@
 // 1. 如何去除标签<i>默认斜体？
 // font-style: normal
+
 // 2. 你有使用过css的writing-mode属性吗？说说它有哪些应用场景？
 // writing-mode属性定义了文本在说平或垂直方向上如何排布
 // 例： writing-mode: horizontal-tb; // 水平方向自上而下的书写方式， 即left-right-top-bottom
+
 // 3. 日常开发中写JS循环时应该注意哪些情况？
 /**
  * (1). 注意死循环(循环要有终止条件)
  * (2). 循环时改变被循环者可能会导致问题
  * (3). 循环异步时需要注意作用域问题(可以使用闭包或块级作用域解决)
- *
+ */
+
 //  4. 怎样避免让用户看到长时间的白屏？
 /**
  * (1). 使用懒加载/骨架屏
  * (2). 使用图片精灵减少网络请求数
  * (3). css压缩, js压缩
  */
+
 // 5. 使用css实现对话气泡的效果
 // 一个方向圆角框加上倒三角组成(倒三角效果： 利用boder, 三边透明, 增加border-width即可)
 // 6. js循环的数据量很大（例如100W+）时会出现什么情况？如何进行性能优化？
@@ -22,9 +26,34 @@
 // 拆分成多份进行, 减少循环中的操作, 使用web worker, 用多线程来处理
 // 如何使用html5进行图片压缩上传？
 /**
- * 图片base64 =>　
- * 使用canvas对图片进行压缩 => 
- * 转blob(new Blob('data', {type: xxx})) => 
+ * 图片base64 =>
+ * 使用canvas对图片进行压缩 =>
+ * 转blob(new Blob('data', {type: xxx})) =>
  * 上传
- * 
+ * 详见demo
+ */
+
+// 6. 请举例说明JSON.stringify()有哪些特性？
+/**
+ * (1). 会把值转化为string类型
+ * (2). undefined function symbol作为对象属性值的时候将会忽略对他们的序列化
+ * (3). undefined function symbol作为数组元素值是, 将会被序列化为null
+ * (4). undefined function sysbol作为单独的值进行转化时, 会被序列化为undefined
+ * (5). 如果转化的值含有toJSON函数的话，将会使用toJSON函数返回的结果
+ * (6). NaN null infinity格式的数值将会被转化为null
+ * (7). JSON.stringify()进行转化是只会转化可枚举到的数据
+ *
+ * 详见 https://github.com/haizlin/fe-interview/issues/2064
+ */
+
+// 7. 当img标签中的src图片加载失败时，怎么让它变得更美观呢？
+/**
+ * 使用占位图 onerror => "javascript:this.src='images/logoError.png'"
+ */
+
+//  8. 用js实现typeof的功能
+/**
+ * function getType(data) {
+ *  return Object.prototype.toString.call(data).slice(8, -1);
+ * }
  */
