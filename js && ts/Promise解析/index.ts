@@ -8,25 +8,25 @@
 //     }
 // }
 
-interface SPromise {
+// interface SPromise {
 
-}
+// }
 
-interface SPromiseLike<T, ResultType> {
-    then: (cb: (result?: ResultType) => void) => T;
-}
+// interface SPromiseLike<T, ResultType> {
+//     then: (cb: (result?: ResultType) => void) => T;
+// }
 
-interface SPromiseConstructor {
-    new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): SPromise;
-}
+// interface SPromiseConstructor {
+//     new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): SPromise;
+// }
 
-const pro = new Promise((res, rej) => {
-    console.log(1);
-    res(2);
-})
+// const pro = new Promise((res, rej) => {
+//     console.log(1);
+//     res(2);
+// })
 
-pro.then(
-    () => {
+// pro.then(
+//     () => {
 
-    }
-)
+//     }
+// )

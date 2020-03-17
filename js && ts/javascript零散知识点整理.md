@@ -102,3 +102,17 @@ console.log(7);
 
 > 参考 https://segmentfault.com/a/1190000016278115
 
+
+promise有几种状态，什么时候会进入catch？
+
+三个状态：
+pending、fulfilled、reject
+两个过程：
+padding -> fulfilled、padding -> rejected当pending为rejectd时，会进入catch
+* pending：初始状态，既不是成功也不是失败
+* fulfilled：意味着操作完全成功
+* rejected：意味着操作失败
+reject 是用来抛出异常，catch 是用来处理异常
+reject 是 Promise 的方法，而 catch 是 Promise 实例的方法
+reject后的东西，一定会进入then中的第二个回调，如果then中没有写第二个回调，则进入catch
+网络异常（比如断网），会直接进入catch而不会进入then的第二个回调
