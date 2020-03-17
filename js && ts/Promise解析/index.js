@@ -108,10 +108,32 @@ class SPromise {
 
     // then方法返回一个promise对象
     then(onFulfilled, onRejected) {
-        typeof onFulfilled === 'function' && this.onFulfilledCallbacks.push(onFulfilled);
-        typeof onRejected === 'function' && this.onRejectedCallbacks.push(onRejected);
-        // 返回this支持then方法可以被同一个promise调用多次
-        return this;
+        // typeof onFulfilled === 'function' && this.onFulfilledCallbacks.push(onFulfilled);
+        // typeof onRejected === 'function' && this.onRejectedCallbacks.push(onRejected);
+        // // 返回this支持then方法可以被同一个promise调用多次
+        // return this;
+        let newPromise;
+        return (newPromise = new SPromise((resolve, reject) => {
+            // 如果onFulfilled或者onRejected返回一个值x, 则运行下面的Promise 解决过程： [[Resolve]](promise2, x)
+            this.onFulfilledCallbacks.push(value => {
+                // 如果onFulfilled或者onRejected抛出一个一场e, 则promise2必须拒绝执行, 并返回拒因e
+                try {
+                    let x = onFulfilled(value);
+                    // 解决过程resolvePromise
+                    resolvePromose(newPromise, x);
+                } catch (e) {
+                    reject(e);
+                }
+            });
+            this.onRejectedCallbacks.push(reason => {
+                try {
+                    let x = onRejected(reason);
+                    resolvePromose(newPromise, x);
+                } catch (e) {
+                    reject(e);
+                }
+            })
+        }));
     }
 }
 
