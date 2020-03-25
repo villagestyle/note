@@ -57,3 +57,25 @@
  *  return Object.prototype.toString.call(data).slice(8, -1);
  * }
  */
+
+//  9. 如何禁止在移动端上的左右滑动动作
+/**
+ * (1). 使用js监听touch系列事件, 判断用户滑动方向, 如果是左右滑动则禁止默认事件(e.preventDefault())
+ * (2). 使用css属性 touch-action: none; 将会禁止所有的滑动事件 touch-action:pan-y; 启用y轴滑动 
+ */
+
+//  10. css属性hover和dom事件mouseover的区别
+/**
+ * (1). hover为css伪类选择器, mouseover是js的dom事件
+ * (2). hover只能改变css属性
+ * (3). hover在鼠标移出之后, 样式就会恢复原样式, mouseover则不会主动恢复, 需要配合其他事件
+ */
+
+// 11. 著名的3像素bug, 怎么解决
+/**
+ * 如何产生: 在div中放置一个img元素, 由于img元素是inline元素, 默认与基线对齐(baseline), 所以图片下方会留有3像素的空白
+ * 解决方案: 
+ * (1). 父元素设置line-height: 0; font-size: 0;
+ * (2). img元素设置vertical-align属性以其他方式对齐
+ * (3). 将img设置为其他类型的标签
+ */
