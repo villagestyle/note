@@ -102,6 +102,7 @@ console.log(7);
 
 > 参考 https://segmentfault.com/a/1190000016278115
 
+## promise（未完）
 
 promise有几种状态，什么时候会进入catch？
 
@@ -109,6 +110,7 @@ promise有几种状态，什么时候会进入catch？
 pending、fulfilled、reject
 两个过程：
 padding -> fulfilled、padding -> rejected当pending为rejectd时，会进入catch
+
 * pending：初始状态，既不是成功也不是失败
 * fulfilled：意味着操作完全成功
 * rejected：意味着操作失败
@@ -116,3 +118,61 @@ reject 是用来抛出异常，catch 是用来处理异常
 reject 是 Promise 的方法，而 catch 是 Promise 实例的方法
 reject后的东西，一定会进入then中的第二个回调，如果then中没有写第二个回调，则进入catch
 网络异常（比如断网），会直接进入catch而不会进入then的第二个回调
+
+## cookie
+
+### 属性
+
+**name / value** 
+
+键名和键值
+
+**expires**
+
+cookie的过期时间，当expries值为空时，说明是会话性cookie，会话性cookie会在用户关闭浏览器时失效（有些浏览器提供会话恢复服务），当值存在时，则为持久性cookie，持久性cookie只会在过期或清除cookie时才会被清除
+
+**max-age**
+
+max-age用于设置在cookie失效之前所要经过的秒数
+
+max-age值为负数 => 会话性cookie
+
+max-age值为0 => 立即删除当前cookie
+
+max-age值为正数 => 持久性cookie
+
+假如max-age和expires同时存在，max-age优先级更高
+
+**domain**
+
+domain指定了cookie可以送达的主机名，如果没有指定，那么默认值为当前文档访问地址中的主机部分(不包含子域名)
+
+**path**
+
+path指定了一个url路径，这个路径必须出现在请求的资源的路径中才可以发送cookie(根据路径判断是否发送cookie)
+
+> domain 和 path 标识共同定义了cookie的作用域，即cookie应该被发送给哪些url
+
+**secure**
+
+标识为secure的cookie只应通过被https协议加密过的请求发送给服务端，使用https安全协议，可以保护cookie在浏览器和web服务器之间的的传输过程中不被窃取和篡改
+
+**httpOnly**
+
+设置httponly可以防止客户端脚本通过document.cookie的方式访问cookie
+
+**sameSite**
+
+sameSite属性可以让cookie在跨站请求时不会被发送，从而可以阻止跨站请求伪造攻击(CSRF)
+
+***cookie的作用***
+
+会话状态管理
+
+个性化设置
+
+浏览器行为跟踪
+
+***cookie的缺点***
+
+大小, 安全, 会增加请求的大小

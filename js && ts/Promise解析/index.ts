@@ -73,35 +73,35 @@ class myPromise {
     }
 }
 
-myPromise.prototype.then = function (onResolved, onRejected): myPromise {
-    let promise2: myPromise = null;
-    const self: myPromise = this;
-    onRejected = typeof onRejected === 'function' ? onRejected : (v: any) => v;
-    onResolved = typeof onResolved === 'function' ? onResolved : (reason: any) => { throw { reason } };
+// myPromise.prototype.then = function (onResolved, onRejected): myPromise {
+//     let promise2: myPromise = null;
+//     const self: myPromise = this;
+//     onRejected = typeof onRejected === 'function' ? onRejected : (v: any) => v;
+//     onResolved = typeof onResolved === 'function' ? onResolved : (reason: any) => { throw { reason } };
 
-    if (self.currentState === "PENGDING") {
-        return promise2 = new myPromise(function(resolve, reject){
-            setTimeout(() => {
-                try {
-                    var x = onResolved(self.value);
-                    resolutionProcedure(promise2, x, resolve, reject);
-                } catch (reason) {
-                    reject(reason);
-                }
-            })
-        })
-    }
+//     if (self.currentState === "PENGDING") {
+//         return promise2 = new myPromise(function(resolve, reject){
+//             setTimeout(() => {
+//                 try {
+//                     var x = onResolved(self.value);
+//                     resolutionProcedure(promise2, x, resolve, reject);
+//                 } catch (reason) {
+//                     reject(reason);
+//                 }
+//             })
+//         })
+//     }
 
-    if (self.currentState === 'REJECTED') {
+//     if (self.currentState === 'REJECTED') {
 
-    }
+//     }
 
-    if (self.currentState === 'RESOLVED') {
+//     if (self.currentState === 'RESOLVED') {
 
-    }
+//     }
 
-    return promise2;
-}
+//     return promise2;
+// }
 
 // function resolutionProcedure() {
 

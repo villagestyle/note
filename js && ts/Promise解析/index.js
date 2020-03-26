@@ -208,3 +208,19 @@ function resolutionProcedure(promise2, x, resolve, reject) {
 }
 
 // 参考 https://juejin.im/post/5e7854ff518825495d69d4a9#heading-10
+
+// var obj = {
+//     a: 1
+// }
+// var value = obj.a;
+// Object.defineProperty(obj, 'a', {
+//     get: () => {
+//         console.log('触发get方法');
+//         return value;
+//     },
+//     set: (val) => {
+//         console.log('触发set方法');
+//         if (val === value) return;
+//         value = val;
+//     }
+// })
