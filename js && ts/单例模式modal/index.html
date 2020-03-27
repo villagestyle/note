@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .demo-modal {
+            width: 400px;
+            height: 200px;
+            position: fixed;
+            top: 150px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            border: 1px solid #ccc;
+            box-shadow: 1px 1px 1px 1px #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="show">显示</button><button id="hide">隐藏</button>
+    <script src="./index.js"></script>
+    <script>
+        const btnShow = document.getElementById('show');
+        const btnHide = document.getElementById('hide');
+
+        btnShow.addEventListener('click', () => {
+            // modal.show('这是modal框');
+            const modal = new Modal();
+            modal.style.display = 'block';
+        })
+
+        btnHide.addEventListener('click', () => {
+            const modal = new Modal();
+            modal.style.display = 'none';
+            // modal.hide();
+        })
+    </script>
+</body>
+
+</html>

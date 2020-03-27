@@ -204,3 +204,24 @@ var findRepeatNumber = function (nums) {
 };
 
 findRepeatNumber(arr);
+
+// 数组去重
+// var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+// arr.reduce((pre, next) {
+//     if ()
+// }, [])
+
+// 1. http和https有什么区别
+// http是超文本传输协议，信息是明文传输，https则是具有安全性的ssl加密传输协议。
+// http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443
+// http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全
+// 2. http的三次握手
+// 第一次握手：客户端发送一个带SYN的TCP报文到服务器，表示客户端想要和服务器端建立连接。
+// 第二次握手：服务器端接收到客户端的请求，返回客户端报文，这个报文带有SYN和ACK确认标示，访问客户端是否准备好。
+// 第三次握手：客户端再次响应服务端一个ACK确认，表示我已经准备好了。
+// 3. http的四次挥手
+// 第一次挥手：TCP发送一个FIN(结束)，用来关闭客户端到服务器端的连接。
+// 第二次挥手：服务器端收到这个FIN后发回一个ACK确认标示，确认收到。
+// 第三次挥手：服务器端发送一个FIN到客户端，服务器端关闭客户端的连接。
+// 第四次挥手：客户端发送ACK报文确认，这样关闭完成。
+// 4. webscoke和scoke的区别

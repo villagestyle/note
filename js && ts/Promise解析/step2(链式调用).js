@@ -35,21 +35,26 @@ function MyPromise(executor) {
 }
 
 MyPromise.prototype.then = function (onFulfilled, onRejected) {
+    console.log('then声明');
     let bridgePromise;
     let self = this;
     onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : onFulfilled => onFulfilled;
     onRejected = typeof onRejected === 'function' ? onRejected : onRejected => onRejected;
     // 需要返回MyPromise
     if (this.status === PENDING) {
+        console.log('执行数据收集');
         return bridgePromise = new MyPromise((resolve, reject) => {
-            self.onFulfilledCallbacks.push((value) => {
-                try {
-                    let x = onFulfilled(value);
-                    resolve(x);
-                } catch (e) {
-                    reject(e);
+            self.onFulfilledCallbacks.push(
+                (value) => {
+                    try {
+                        console.log(onFulfilled);
+                        let x = onFulfilled(value); // x指向第一个then中返回的MyPromise
+                        resolve(x); // 将新的promise返回
+                    } catch (e) {
+                        reject(e);
+                    }
                 }
-            });
+            );
             self.onRejectedCallbacks.push((error) => {
                 try {
                     let x = onRejected(error);
@@ -76,6 +81,7 @@ MyPromise.prototype.then = function (onFulfilled, onRejected) {
 // 如果要实现链式调用?
 var data = 1;
 var pro = new MyPromise((res, reject) => {
+    console.log('第一次同步回调');
     setTimeout(() => {
         res(data++);
     }, 1000)
