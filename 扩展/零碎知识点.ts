@@ -79,3 +79,17 @@
  * (2). img元素设置vertical-align属性以其他方式对齐
  * (3). 将img设置为其他类型的标签
  */
+
+//  12. 哪些标签是不支持伪元素的
+/**
+ * 单标签元素都不支持伪元素
+ */
+
+// 13. noscript标签的作用
+// noscript标签中的文本会在浏览器无法执行脚本代码时显示(不支持js的环境中)
+
+//  ts小技巧
+// type Keys = 'a' | 'b';
+// interface Key {
+//     [key in Keys]: any
+// }
