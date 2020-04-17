@@ -224,4 +224,8 @@ findRepeatNumber(arr);
 // 第二次挥手：服务器端收到这个FIN后发回一个ACK确认标示，确认收到。
 // 第三次挥手：服务器端发送一个FIN到客户端，服务器端关闭客户端的连接。
 // 第四次挥手：客户端发送ACK报文确认，这样关闭完成。
-// 4. webscoke和scoke的区别
+
+// function sumOfMultiples() {
+//     const arr = Object.keys(Array(100).fill(1));
+//     Array(100).fill(1).map((item, index) => index);
+// }

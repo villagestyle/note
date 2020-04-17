@@ -336,3 +336,15 @@ let obg: SearchPage = {
   schoolYearId: 1,
   text: 1
 }
+
+interface Obj<T, R> {
+  key: string;
+  value: T,
+  userInfo: R
+}
+
+interface Data {
+  name: string;
+}
+
+const obj1: Obj<string, Data> = {} as Obj<string, Data>
