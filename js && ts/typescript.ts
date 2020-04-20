@@ -1,61 +1,66 @@
 function greeter(person: String): string {
-  return person + ',hi'
+  return person + ",hi";
 }
-let user = 'Jane User';
+let user = "Jane User";
 
-let data: any = 'aa';
+let data: any = "aa";
 
 let bool: boolean = true;
 
 interface Person {
-  name: String,
-  age: Number
+  name: String;
+  age: Number;
 }
 
 var tom: Person = {
-  name: 'tom',
+  name: "tom",
   age: 2
-}
+};
 
 interface Person2 {
-  name: String,
-  age?: Number
+  name: String;
+  age?: Number;
 }
 
 let jane: Person2 = {
-  name: '112'
-}
+  name: "112"
+};
 
 interface Person3 {
   name: String;
   age?: Number;
-  [propName: string]: any
+  [propName: string]: any;
 }
 
 let sony: Person3 = {
-  name: 'sony',
+  name: "sony",
   height: 185,
   weight: 150
-}
+};
 
 interface Person4 {
-  readonly id: String, // 设置为只读，只读的约束存在于第一次给对象赋值的时候，而不是第一次给只读属性赋值的时候
-  name: String,
-  ang?: Number,
-  [propName: string]: any
+  readonly id: String; // 设置为只读，只读的约束存在于第一次给对象赋值的时候，而不是第一次给只读属性赋值的时候
+  name: String;
+  ang?: Number;
+  [propName: string]: any;
 }
 
 let kangk: Person4 = {
-  id: '152asq4r8', // 试图修改该属性会报错
-  name: 'kang',
+  id: "152asq4r8", // 试图修改该属性会报错
+  name: "kang",
   height: 999
-}
+};
 
-let fibonacci: Array<number> = [1, 2, 3, 4]
+let fibonacci: Array<number> = [1, 2, 3, 4];
 
-let list: any[] = [1, 2, '5', {
-  name: 555
-}];
+let list: any[] = [
+  1,
+  2,
+  "5",
+  {
+    name: 555
+  }
+];
 
 // function sum(num1: number, num2: number): number {
 //     return num1 + num2;
@@ -63,16 +68,16 @@ let list: any[] = [1, 2, '5', {
 
 let mySum: (x: number, y: number) => number = function (x: number, y: number) {
   return x + y;
-}
+};
 
 interface SearchFunc {
-  (source: string, subString: string): boolean
+  (source: string, subString: string): boolean;
 }
 
 let mySearch: SearchFunc;
 mySearch = function (score: string, subString: string) {
   return score.search(subString) !== -1;
-}
+};
 
 // function buildName(firstName: string = 'lily', lastName: string = 'pandagan'): string{
 //     return firstName + ' ' + lastName;
@@ -80,44 +85,41 @@ mySearch = function (score: string, subString: string) {
 
 // let ache = buildName();
 // let jone = buildName('tom', 'cat')
-console.log('11')
-
+console.log("11");
 
 function push(array: Array<any>, ...items: any[]) {
   // 得到的items是一个数组
   items.forEach(item => {
-    array.push(item)
-  })
+    array.push(item);
+  });
 }
 
 // let a = [];
 // push(a, 1, 2, 3);
 // console.log(a);
 
-
 function reverce(x: number | string): number | string {
-  if (typeof x === 'string') {
-    return x.split('').reverse().join('');
+  if (typeof x === "string") {
+    return x.split("").reverse().join("");
   } else {
-    return Number(x.toString().split('').reverse().join(''))
+    return Number(x.toString().split("").reverse().join(""));
   }
 }
 
-console.log(reverce(54321))
-console.log(reverce('123456'))
+console.log(reverce(54321));
+console.log(reverce("123456"));
 
 // 类型断言 <>
 function getLength(something: string | number): number {
-  if ((<string>something).length) { // 断言something将会是string类型
+  if ((<string>something).length) {
+    // 断言something将会是string类型
     return (<string>something).length;
   } else {
     return something.toString().length;
   }
 }
 
-
 let dat: Date = new Date();
-
 
 class Animal {
   // 使用 static 修饰符修饰的方法称为静态方法，它们不需要实例化，而是直接通过类来调用
@@ -128,7 +130,6 @@ class Animal {
 
 let ab = new Animal();
 Animal.isAnimal(ab);
-
 
 class Animal2 {
   name: string;
@@ -167,11 +168,10 @@ abstract class Animal3 {
 // 正确使用抽象类的例子
 class Cat extends Animal3 {
   public sayHi() {
-    console.log(`meow my name is ${this.name}`)
+    console.log(`meow my name is ${this.name}`);
   }
 }
-let cat = new Cat('tom');
-
+let cat = new Cat("tom");
 
 // 类与接口
 // 如果你希望在类中使用必须遵循的接口（类）或是别人定义的对象结构，可以使用 implements 关键字来确保兼容性：
@@ -180,19 +180,17 @@ interface Alerm {
   alert();
 }
 
-class Door {
-
-}
+class Door {}
 
 class SecurityDoor extends Door implements Alerm {
   alert() {
-    console.log('secur')
+    console.log("secur");
   }
 }
 
 class Car implements Alerm {
   alert() {
-    console.log('car alert')
+    console.log("car alert");
   }
 }
 
@@ -206,22 +204,21 @@ function creareArray<T>(length: number, value: T): Array<T> {
   }
   return result;
 }
-creareArray(3, 5)
-
+creareArray(3, 5);
 
 // 申明合并
 // 如果定义了两个相同名字的函数、接口或类，那么它们会合并成一个类型
 
 interface Alermt {
-  price: number
+  price: number;
 }
 
 interface Alermt {
-  name: string
+  name: string;
 }
 
 interface Alermt {
-  id: string
+  id: string;
 }
 
 interface Alermt {
@@ -229,22 +226,27 @@ interface Alermt {
   name: string;
   id: string;
   type: string;
-  alert(): string
+  alert(): string;
 }
 
 class Alerms implements Alermt {
   price: 55;
-  name: '标签';
-  id: '1';
-  type: '办公用品';
+  name: "标签";
+  id: "1";
+  type: "办公用品";
   alert(): string {
-    return ''
+    return "";
   }
 }
 
 // 枚举 enum
 
-enum Color { Red = 5, Green, Blue, ligntBlue };
+enum Color {
+  Red = 5,
+  Green,
+  Blue,
+  ligntBlue
+}
 let colorName: string = Color[6];
 console.log(colorName); // 'Green'
 
@@ -253,7 +255,7 @@ interface SqureConfig {
   width: number;
 }
 function createSqure(config: SqureConfig): SqureConfig {
-  let newSquare = { color: 'white', width: 888 };
+  let newSquare = { color: "white", width: 888 };
   if (config.color) {
     newSquare.color = config.color;
   }
@@ -263,28 +265,28 @@ function createSqure(config: SqureConfig): SqureConfig {
 
 interface Point {
   readonly x: number;
-  y: number
+  y: number;
 }
 
 let point1: Point = {
   x: 55,
   y: 6
-}
+};
 
 point1.y = 555;
 // point1.x = 666; // Cannot assign to 'x' because it is a read-only property
 
 // 用接口描述函数类型
 interface SearchFunc2 {
-  (score: string, subString: string): boolean
+  (score: string, subString: string): boolean;
 }
 let searchFunc2: SearchFunc2;
 searchFunc2 = function () {
   return true;
-}
+};
 
 function toDetail(arr: Array<any> | number | string): number {
-  if (typeof arr === 'number') {
+  if (typeof arr === "number") {
     return arr + 50;
   } else {
     return arr.length;
@@ -292,11 +294,11 @@ function toDetail(arr: Array<any> | number | string): number {
 }
 
 class Animal4 {
-  name: string
+  name: string;
 }
 
 class Dog extends Animal4 {
-  breed: string
+  breed: string;
 }
 
 interface NotOkey {
@@ -307,44 +309,64 @@ interface NotOkey {
 
 // o => item
 const listOfTags = [
-  { id: 1, label: "Hello", color: "red", sorting: 0 }, 
-  { id: 2, label: "World", color: "green", sorting: 1 }, 
-  { id: 3, label: "Hello", color: "blue", sorting: 4 }, 
-  { id: 4, label: "Sunshine", color: "yellow", sorting: 5 }, 
-  { id: 5, label: "Hello", color: "red", sorting: 6 }],
-  keys = ['label', 'color'],
+    { id: 1, label: "Hello", color: "red", sorting: 0 },
+    { id: 2, label: "World", color: "green", sorting: 1 },
+    { id: 3, label: "Hello", color: "blue", sorting: 4 },
+    { id: 4, label: "Sunshine", color: "yellow", sorting: 5 },
+    { id: 5, label: "Hello", color: "red", sorting: 6 }
+  ],
+  keys = ["label", "color"],
   filtered = listOfTags.filter(
-    (s =>
-       o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join('|'))
-       )(new Set)
-    );
+    (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join("|")))(
+      new Set()
+    )
+  );
 
 console.log(filtered);
 
 interface SearchPage {
-  pageNum: number,
-  rows: number,
-  name: string,
-  schoolYearId: number,
-  [propName: string]: any
+  pageNum: number;
+  rows: number;
+  name: string;
+  schoolYearId: number;
+  [propName: string]: any;
 }
 
 let obg: SearchPage = {
   pageNum: 1,
   rows: 1,
-  name: '',
+  name: "",
   schoolYearId: 1,
   text: 1
-}
+};
 
 interface Obj<T, R> {
   key: string;
-  value: T,
-  userInfo: R
+  value: T;
+  userInfo: R;
 }
 
 interface Data {
   name: string;
 }
 
-const obj1: Obj<string, Data> = {} as Obj<string, Data>
+const obj1: Obj<string, Data> = {} as Obj<string, Data>;
+
+// 执行上下文栈
+// 加入全局上下文
+// 解析函数代码
+// 创建函数
+// 保存作用域到内部[[scope]]
+// 执行函数 -- 初始化函数
+// 创建函数上下文
+// 复制作用域到函数上下文
+// 创建活动对象AO
+// 初始化活动对象
+// 将活动对象压入作用域顶端
+// 执行上下文栈中添加函数上下文
+// 执行函数 -- 代码执行
+// 随着函数执行更新活动对象
+// 在代码执行过程中,使用到值时,将会进入函数上下文中的活动对象中进行查找,
+// 如果查找不到,则顺着函数上下文中的Scope向上查找(Scope中存储了活动对象及上级作用域)
+// 执行函数 -- 函数执行完毕
+// 从执行上下文栈中弹出函数上下文
