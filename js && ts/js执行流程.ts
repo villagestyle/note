@@ -20,7 +20,7 @@ checkscope = {
   ]
 }
 
-// 执行到checkscope函数，闯将checkscope函数上下文，checkscope函数执行上下文被压入执行上下文栈
+// 执行到checkscope函数，创建checkscope函数上下文，checkscope函数执行上下文被压入执行上下文栈
 ECStrack = [
   checkscopeContext,
   globalContext,

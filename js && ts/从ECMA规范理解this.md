@@ -1,6 +1,6 @@
 ## 从ECMA规范理解this
 
-ps: 此处的ECMA规范为es5
+ps: 此处的ECMA规范为[es5](http://yanhaijing.com/es5/#211)
 
 在《JavaScript深入之执行上下文栈》中讲到，当JavaScript代码执行一段可执行代码(executable code)时，会创建对应的执行上下文(execution context)。
 
@@ -114,7 +114,7 @@ GetValue 返回对象属性真正的值，打码师要注意：
 
 1. 计算MemberExpression的结果赋值给ref
 2. 判断ref是不是一个Reference类型
-   - 如果 ref 是 Reference，并且 IsPropertyReference(ref)是true
+   - 如果 ref 是 Reference，并且 IsPropertyReference(ref)是true，那么 this 的值为 GetBase(ref)
    - 如果 ref 是 Reference，并且base value值是Environment Record，那么this的值为ImplicitThisValue(ref)
    - 如果 ref 不是Reference，那么 this 的值为undefined
 
@@ -191,7 +191,161 @@ GetValue 返回对象属性真正的值，打码师要注意：
 
    **foo.bar()**
 
-   在示例1中，MemberExpression计算的结果是foo.bar，那么foo.bar是不是一个 Reference 呢？
+   我们得知该表达式返回了一个 Reference 类型，
 
+   根据之前的内容，我们知道该值为：
    
+   ```javascript
+   var Reference = {
+   	base: foo,
+       name: 'bar',
+       strict: false
+   }
+   ```
+   
+   接下来按照上面的判断流程走：
+   
+   > 如果ref是Reference，并且 IsPropertyReference(ref) 是true，那么 this 的值为 GetBase(ref)
+   
+   该值是Reference类型，那么 IsPropertyReference(ref) 的结果是什么呢？
+   
+   前面我们已经铺垫了 IsPropertyReference 方法，如果 base value 是一个对象，结果返回 true
+   
+   base value 为 foo，是一个对象，所以 IsPropertyReference(ref) 的结果是true
+   
+   这个时候我们就能确定this的值了：
+   
+   ```javascript
+   this = GetBase(ref);
+   ```
+   
+   GetBase 也已经铺垫了，获得 base value 值，这个例子中就是foo，所以 this 的值就是foo，示例1的结果就是2！
+   
+   **(foo.bar)()**
+   
+   看示例2：
+   
+   ```javascript
+   console.log((foo.bar)());
+   ```
+   
+   foo.bar 被 () 包住，查看规范11.1.6
+   
+   实际上 () 并没有对 MemberExpression 进行计算，所以其实和示例1的结果是一样的。
+   
+   **(foo.bar = foo.bar)()**
+   
+   看示例3，有赋值操作符，查看规范 11.13.1 Simple Assignment (=)：
+   
+   计算的第三步：
+   
+   > Let rval be GetValue
+   
+   因为GetValue返回的不是Reference类型，
+   
+   按照之前讲的判断逻辑：
+   
+   > 如果ref不是Reference，那么this的值为undefined
+   
+   this为undefined，非严格模式下，this的值为undefined的时候，其值会被隐式转换成全局对象。
+   
+   **（false || foo.bar()）**
+   
+   看示例4，逻辑与算法，查看规范11.11
+   
+   计算第二步：
+   
+   > let lval be GetValue(ref)
+   
+   因为使用了GetValue，所以返回的不是Reference类型，this为undefined
+   
+   **(foo.bar, foo.bar())**
+   
+   看示例5，逗号操作符，查看规范11.14
+   
+   计算第二步：
+   
+   > call GetValue(ref)
+   
+   因为使用了GetValue，所以返回的不是Reference类型，this为undefined
+
+### 揭晓结果
+
+所以最后一个例子的结果是:
+
+```javascript
+var value = 1;
+var foo = {
+    value: 2,
+    bar: function() {
+		return this.value;
+    }
+}
+// 示例1
+console.log(foo.bar()); // 2
+// 示例2
+console.log(foo.bar()()); // 2
+// 示例3
+console.log((foo.bar = foo.bar)()); // 1
+// 示例4
+console.log((false || foo.bar)()); // 1
+// 示例5
+console.log((foo.bar, foo.bar)()); // 1
+```
+
+注意：以上是在非严格模式下的结果，严格模式下因为this返回undefined，所以示例3会报错。
+
+### 补充
+
+最最后，忘记了一个最最普通的情况：
+
+```javascript
+function foo() {
+	console.log(this);
+}
+foo();
+```
+
+MemberExpression 是 foo，解析标识符，查看规范 10.3.1，会返回一个Reference类型的值：
+
+```javascript
+var fooReference = {
+    base: EnvironmentRecord,
+    name: 'foo',
+    strict: false
+}
+```
+
+接下来判断：
+
+> 如果ref是Reference，并且IsPropertyReference(ref)是true，那么this的值为GetBase(ref)
+
+因为basevalue是EnvironmentRecord，并不是一个Object类型
+
+IsPropertyReference(ref)的结果为 false，进入下个判断：
+
+> 如果ref是reference，并且base value值是Environment Record，那么this的值为ImplcitThisValue(ref)
+
+base value 正是 Environment Record，所以会调用 ImplcitThisValue(ref)
+
+查看规范 10.2.1.1.6，ImplcitThisValue方法的介绍，该函数始终返回 undefined。
+
+所以最后this的值就是undefined
+
+## 多说一句 
+
+尽管我们可以简单的理解 this 为调用函数的对象，如果是这样的话，如何解释下面这个例子呢？
+
+```
+var value = 1;
+var foo = {
+	value: 2,
+	bar: function() {
+		return this.value;
+	}
+}
+console.log((false || foo.bar))
+```
+
+
 
