@@ -862,7 +862,7 @@ ojbk.moveBy(5, 5);
 // 映射类型Pick
 /* 抽取对象子集的Pick映射类型 */
 type FunctionPropertyNames<T> = {
-  [K in keyof T]: T[K] extends Function ? K: never
+  [K in keyof T]: T[K] extends Function ? K : never
 }[keyof T];
 // 新类型中只包含指定的FunctionPropertyNames<T>的类型
 type FunctionProperties<T> = Pick<T, FunctionPropertyNames<T>>;
@@ -884,3 +884,62 @@ K: 'id' | 'name' | 'subparts' | 'updatePart'
 T[K]: value
 value extends Function // 值是否继承于Function(是否是Function类型)
 */
+
+// class SomeClass {
+//   value = [1, 2, 3];
+
+//   someMethod() {
+//     this.value.find(/* ... */); // ok
+//     this.find(/* ... */); // Error: SomeClass没有find方法
+//   }
+// }
+
+// type ArrayMethodName = 'filter' | 'forEach' | 'find';
+
+// type SelectArrayMethod<T> = {
+//   [k in ArrayMethodName]: Array<T>[k]
+// }
+
+// interface SomeClass extends SelectArrayMethod<number> {};
+
+// class SomeClass {
+//   value = [1, 2, 3];
+  
+//   someMethods() {
+//     this.forEach // ok
+//     this.find // ok
+//     this.filter // ok
+//     this.value // ok
+//     this.someMethods(); // ok
+//     }
+// }
+
+// const someClass = new SomeClass();
+// someClass.find // ok
+// someClass.filter // ok
+// someClass.forEach // ok 
+// someClass.value // ok
+// someClass.someMethods // ok
+
+// interface MiPhone {
+//   name: string;
+// }
+
+// const mi5: MiPhone = {
+//   name: 'Mi 5'
+// }
+
+// const mi3: typeof mi5 = {
+//   name: 'Mi 3'
+// };
+
+// console.log(typeof mi5);
+
+// interface User {
+//   name: string;
+//   age: number;
+// }
+
+// export default class NewRoom extends Vue {
+//   private user = {} as User;
+// }
