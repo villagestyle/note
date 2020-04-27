@@ -771,10 +771,116 @@ Person.prototype = {
 // const arr = [];
 // arr = []; // error
 
-
-
 // silicon valley  172
 
-type ParamType<T> = T extends (param: infer P) => any ? P : T;
+/** 函数重载 */
+declare function test(a: number): number;
+declare function test(a: string): string;
 
-const params: ParamType<string> = '';
+const resS = test("Hello World"); // resS => string
+const resN = test(1234); // resN => number
+
+// interface User {
+//   name: string;
+//   age: number;
+// }
+
+// declare function test(para: User): number;
+// declare function test(para: number, flag: boolean): number;
+
+// const user = {
+//   name: 'jack',
+//   age: 12
+// }
+
+// // Error: 参数不匹配
+// const res = test(user, false);
+
+// interface User {
+//   name: string;
+//   age: number;
+// }
+
+// const user = {
+//   name: "jack",
+//   age: 16
+// };
+
+// class SomeClass {
+//   /**
+//    * 注释1
+//    */
+//   public test(para: User): number;
+//   /**
+//    * 注释2
+//    */
+//   public test(para: number, flag: boolean): number;
+//   public test() {
+//     return 1;
+//   }
+// }
+
+// const someClass = new SomeClass();
+
+// // ok
+// someClass.test(user);
+// someClass.test(123, false);
+
+// // Error
+// someClass.test(123);
+// someClass.test(user, false);
+
+type ObjectDescriptor<D, M> = {
+  data?: D;
+  methods?: M & ThisType<D & M>; // type of this in methods is D & M
+}
+
+function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M {
+  let data: object = desc.data || {};
+  let methods: object = desc.methods || {};
+  return { ...data, ...methods } as D & M;
+}
+
+let ojbk = makeObject({
+  data: {
+    x: 0,
+    y: 0
+  },
+  methods: {
+    moveBy(dx: number, dy: number) {
+      this.x += dx;
+      this.y += dy;
+    }
+  }
+})
+
+ojbk.x = 10;
+ojbk.y = 10;
+ojbk.moveBy(5, 5);
+
+
+// 映射类型Pick
+/* 抽取对象子集的Pick映射类型 */
+type FunctionPropertyNames<T> = {
+  [K in keyof T]: T[K] extends Function ? K: never
+}[keyof T];
+// 新类型中只包含指定的FunctionPropertyNames<T>的类型
+type FunctionProperties<T> = Pick<T, FunctionPropertyNames<T>>;
+
+interface Part {
+  id: number;
+  name: string;
+  subparts: Part[];
+  updatePart(newName: string): void;
+}
+
+type T40 = FunctionPropertyNames<Part>;
+type T42 = FunctionProperties<Part>;
+
+/* 
+keyof T
+[id, name, subparts, updatePart]
+K: 'id' | 'name' | 'subparts' | 'updatePart'
+T[K]: value
+value extends Function // 值是否继承于Function(是否是Function类型)
+*/
