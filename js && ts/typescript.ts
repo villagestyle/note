@@ -519,14 +519,13 @@ Function.prototype.bind = function (context, ...args) {
 //   this.strength = 60;
 //   this.age = age;
 
-  // return {
-  //   name: name,
-  //   hobit: 'games'
-  // }
+// return {
+//   name: name,
+//   hobit: 'games'
+// }
 // }
 
 // var person = new Otaku("kevin", "18");
-
 
 // function foo2(name, age, sex?, hobbit?) {
 //   console.log(name, arguments[0]); // 'name' 'name'
@@ -542,7 +541,7 @@ Function.prototype.bind = function (context, ...args) {
 //   // 测试未传入的值是否会绑定
 //   console.log(sex); // undefined
 //   sex = 'new sex';
-//   console.log(sex, arguments[2]); // new sex undefined 
+//   console.log(sex, arguments[2]); // new sex undefined
 
 //   arguments[3] = 'new hobit';
 //   console.log(hobbit, arguments[3]); // undefined new hobit
@@ -599,17 +598,52 @@ Function.prototype.bind = function (context, ...args) {
 
 // 4.1 动态原型模式
 
+// function Person(name) {
+//   this.name = name;
+//   if (typeof this.getName != 'function') {
+//     Person.prototype.getName = function() {
+//       console.log(this.name);
+//     }
+//   }
+// }
+
+// var person1 = new Person('kevin');
+// var person2 = new Person('kevin');
+
 function Person(name) {
   this.name = name;
-  if (typeof this.getName != 'function') {
-    Person.prototype.getName = function() {
-      console.log(this.name);
-    }
+  if (typeof this.getName != "function") {
+    Person.prototype = {
+      constructor: Person,
+      getName: function () {
+        console.log(this.name);
+      }
+    };
   }
 }
 
-var person1 = new Person('kevin');
-var person2 = new Person('kevin');
+var person1 = new Person("kevin");
+var person2 = new Person("kevin2");
+
+// 报错，不存在该方法
+person1.getName();
+// 注释掉上面的代码，这句是可以执行的
+person2.getName();
+
+// new
+var obj = Object.create(Person.prototype);
+obj.__proto__ === Person.prototype;
+// Person.apply(obj); == > obj.Person(name);
+obj.Person(name);
+// obj.name = name;
+// obj.getName != "function"  true
+Person.prototype = {
+  constructor: Person,
+  getName: function () {
+    console.log(this.name);
+  }
+};
+// return obj; === > person1
 
 // apply的实现
 // Function.prototype.apply = function(context, args) {
@@ -635,3 +669,112 @@ var person2 = new Person('kevin');
 // }
 
 // Person.apply(obj);
+
+// function Water(name) {
+//   this.name = name;
+//   if (typeof this.getName !== "function") {
+//     console.log('执行次数');
+//     Water.prototype = {
+//       constructor: Water,
+//       getName: function () {
+//         console.log(this.name);
+//       }
+//     };
+//     return new Water(name);
+//   }
+// }
+
+// var coco = new Water("coco");
+// coco.getName();
+
+// var baishi = new Water("baishi");
+// baishi.getName();
+
+// var wahaha = new Water("wahaha");
+// wahaha.getName();
+
+// function Parent() {
+//   this.name = 'kevin'
+// }
+
+// Parent.prototype.getName = function() {
+//   console.log(this.name);
+// }
+
+// function Child() {
+// }
+
+// Child.prototype = {
+//   constructor: Child,
+//   __proto__: Parent.prototype
+// }
+
+// var child1 = new Child();
+// console.log(child1.getName());
+// var child2 = new Child();
+// console.log(child2.getName());
+
+// function Parent() {
+//   this.name = 'kevin'
+// }
+
+// Parent.prototype.getName = function() {
+//   console.log(this.name);
+// }
+
+// function Child() {
+// }
+
+// // child的原型指向Parent的实例
+// Child.prototype = new Parent();
+
+// var child1 = new Child();
+// console.log(child1.getName());
+
+// 问题
+// var funcs: Function[] = [];
+// for (var i = 0; i < 3; i++) {
+//   funcs[i] = function() {
+//     console.log(i);
+//   }
+// }
+// funcs[0]();
+// funcs[1]();
+// funcs[2]();
+
+// 解法1
+// var funcs: Function[] = [];
+// for (let i = 0; i < 3; i++) {
+//   funcs[i] = function() {
+//     console.log(i);
+//   }
+// }
+// funcs[0]();
+// funcs[1]();
+// funcs[2]();
+
+// 解法2
+// var funcs: Function[] = [];
+// for (var i = 0; i < 3; i++) {
+//   funcs[i] = (function(j) {
+//     return function() {
+//       console.log(j);
+//     }
+//   }(i))
+// }
+// funcs[0]();
+// funcs[1]();
+// funcs[2]();
+
+// const不允许修改值绑定，但是可以修改值
+// 在引用类型中，const定义的值的引用地址不允许被改变，但是值可以被改变
+// const arr = [];
+// arr = []; // error
+
+
+
+// silicon valley  172
+
+type ParamType<T> = T extends (param: infer P) => any ? P : T;
+
+const params: ParamType<string> = '';
