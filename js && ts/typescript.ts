@@ -833,7 +833,7 @@ const resN = test(1234); // resN => number
 type ObjectDescriptor<D, M> = {
   data?: D;
   methods?: M & ThisType<D & M>; // type of this in methods is D & M
-}
+};
 
 function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M {
   let data: object = desc.data || {};
@@ -852,17 +852,16 @@ let ojbk = makeObject({
       this.y += dy;
     }
   }
-})
+});
 
 ojbk.x = 10;
 ojbk.y = 10;
 ojbk.moveBy(5, 5);
 
-
 // 映射类型Pick
 /* 抽取对象子集的Pick映射类型 */
 type FunctionPropertyNames<T> = {
-  [K in keyof T]: T[K] extends Function ? K : never
+  [K in keyof T]: T[K] extends Function ? K : never;
 }[keyof T];
 // 新类型中只包含指定的FunctionPropertyNames<T>的类型
 type FunctionProperties<T> = Pick<T, FunctionPropertyNames<T>>;
@@ -904,7 +903,7 @@ value extends Function // 值是否继承于Function(是否是Function类型)
 
 // class SomeClass {
 //   value = [1, 2, 3];
-  
+
 //   someMethods() {
 //     this.forEach // ok
 //     this.find // ok
@@ -917,7 +916,7 @@ value extends Function // 值是否继承于Function(是否是Function类型)
 // const someClass = new SomeClass();
 // someClass.find // ok
 // someClass.filter // ok
-// someClass.forEach // ok 
+// someClass.forEach // ok
 // someClass.value // ok
 // someClass.someMethods // ok
 
@@ -943,3 +942,44 @@ value extends Function // 值是否继承于Function(是否是Function类型)
 // export default class NewRoom extends Vue {
 //   private user = {} as User;
 // }
+
+export const enum ObjectFlags {
+  Class = 1 << 0,
+  interface = 1 << 1
+}
+
+enum Days {
+  Sum,
+  Mon,
+  Tue,
+  Wed,
+  Thu,
+  Fri,
+  Sat
+}
+
+// Days.Wed // number = 3
+
+enum color {
+  red, blue, green = 'g', grey = 'y', pop = 7, origin
+}
+
+// Color.blue === 1; // true
+// Color.green === 'g'; // true
+// Color.origin === 8;
+// 如果紧接在计算所得项后，未手动赋值的项就会报错
+
+enum Config {
+  baseURL = 'www.baidu.com',
+}
+
+const config = {
+  baseURL: 'www.baidu.com'
+}
+
+const enum NoYes {
+  No, Yes
+}
+
+var a: MethodDecorator;
+
