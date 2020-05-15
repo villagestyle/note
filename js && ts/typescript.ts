@@ -961,7 +961,12 @@ enum Days {
 // Days.Wed // number = 3
 
 enum color {
-  red, blue, green = 'g', grey = 'y', pop = 7, origin
+  red,
+  blue,
+  green = "g",
+  grey = "y",
+  pop = 7,
+  origin
 }
 
 // Color.blue === 1; // true
@@ -970,16 +975,112 @@ enum color {
 // 如果紧接在计算所得项后，未手动赋值的项就会报错
 
 enum Config {
-  baseURL = 'www.baidu.com',
+  baseURL = "www.baidu.com"
 }
 
 const config = {
-  baseURL: 'www.baidu.com'
-}
+  baseURL: "www.baidu.com"
+};
 
 const enum NoYes {
-  No, Yes
+  No,
+  Yes
 }
 
 var a: MethodDecorator;
+
+// 数组去重
+var array = ["1", "1", "1", "2", "2"];
+
+// 双重for循环
+// function unique(arr: typeof array) {
+//   var result = [];
+//   var hasSimilar = false;
+//   result.push(arr[0]);
+//   for (var i = 0; i < arr.length; i++) {
+//     for (var j = 0; j < result.length; j++) {
+//       if (arr[i] === result[j]) {
+//         hasSimilar = true;
+//         break;
+//       }
+//     }
+//     if (!hasSimilar) {
+//       result.push(arr[i])
+//     }
+//     hasSimilar = false;
+//   }
+//   return result;
+// }
+
+// unique(array);
+
+// indexOf方法
+// function unique(arr: any[]) {
+//   var res = [];
+//   for (var i = 0; i < arr.length; i++) {
+//     if (res.indexOf(arr[i]) === -1) {
+//       res.push(arr[i]);
+//     }
+//   }
+//   return res;
+// }
+
+// unique(array);
+
+// 先排序再去重
+// 对于[1, '1', 1, '1']这种数组无法起到排序作用，会导致错误
+// var array2 = [1, '1', 1, '1'];
+// function unique(arr) {
+//   if (arr.length === 0 || arr.length === 1) {
+//     return arr;
+//   }
+//   let res = [];
+//   const selfArr = arr.slice(0);
+//   selfArr
+//     .sort((a, b) => a - b)
+//     .reduce((pre, cur) => {
+//       if (cur !== pre) {
+//         res.push(pre);
+//         res.push(cur);
+//       }
+//       return pre = cur;
+//     });
+//   return res;
+// }
+
+// unique(array2);
+
+interface Good {
+  id: number;
+  desc: string;
+  price: number;
+  number: number;
+}
+
+var goodList: Good[] = [
+  {
+    number: 1,
+    id: 1,
+    price: 1,
+    desc: "1"
+  },
+  {
+    number: 2,
+    id: 2,
+    price: 2,
+    desc: "2"
+  }
+];
+
+function del(id: number) {
+  return goodList.filter(d => {
+    if (d.id === id && d.number === 1) {
+      return false;
+    } else if (d.id === id) {
+      d.number--;
+    }
+    return true;
+  });
+}
+
 
