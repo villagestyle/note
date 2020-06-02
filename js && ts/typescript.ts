@@ -1083,4 +1083,517 @@ function del(id: number) {
   });
 }
 
+// 如果希望每隔 1s 输出一个结果，应该如何改造？注意不可改动 square 方法
+const list = [1, 2, 3];
+const square = num => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(num * num);
+    }, 1000);
+  });
+};
 
+var tests = async () => {
+  for (var i = 0; i < list.length; i++) {
+    const res = await square(list[i]);
+    console.log(res);
+  }
+};
+tests();
+
+let fn: Function = async () => {};
+
+parseInt("1", 0);
+parseInt("2", 1);
+parseInt("3", 2);
+// ['1', '2', '3'].map(parseInt)
+
+// 防抖
+function debounce(fn: Function) {
+  let timer = null;
+  return function () {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(this, arguments);
+    }, 500);
+  };
+}
+
+// 节流
+function throttle(fn: Function) {
+  let canRun = true;
+  return function (...arg) {
+    if (!canRun) return;
+    canRun = false;
+    setTimeout(() => {
+      fn.apply(this, arg);
+      canRun = true;
+    }, 500);
+  };
+}
+
+// 都是通过闭包实现变量管理/不需要生成全局变量
+
+// Set也会检查筛选掉引用地址相同的变量
+
+var arr = [[1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10];
+
+// depth 深度
+// arr.flat([depth]);
+// arr.flat(5)
+
+function fnFlat(arr: any[]) {
+  return arr.reduce((pre, cur) => {
+    if (typeof cur === "number") {
+      pre.push(cur);
+      return pre;
+    } else {
+      return pre.concat(fnFlat(cur));
+    }
+  }, []);
+}
+
+class LRUCache {
+  CACHE: {
+    [key: number]: number;
+  } = {};
+  max: number = 3;
+  private keyCache: number[] = [];
+
+  constructor(
+    cache: {
+      [key: number]: number;
+    },
+    max: number
+  ) {
+    this.CACHE = cache;
+    this.max = max;
+  }
+
+  public put(key: number, value: number) {
+    this.CACHE[key] = value;
+    this.keyCache.push(key);
+    if (this.keyCache.length > this.max) {
+      delete this.CACHE[this.keyCache.shift()];
+    }
+  }
+
+  public get(key: number) {
+    return this.CACHE[key] || -1;
+  }
+}
+
+// 单链表
+function List() {
+  let Node = function (ele) {
+    this.element = ele;
+    this.next = null;
+  };
+
+  // 初始化头节点为null
+  let head = null;
+
+  // 链表长度
+  let length = 0;
+
+  // 操作
+  this.getList = function () {
+    return head;
+  };
+
+  this.search = function (element) {
+    let p = head;
+    if (!p) return false;
+    while (p) {
+      if (p.element === element) return true;
+      p = p.next;
+    }
+    return false;
+  };
+
+  this.append = function (element) {
+    let node = new Node(element);
+    let p = head;
+    if (!head) {
+      head = node;
+    } else {
+      while (p.next) {
+        p = p.next;
+      }
+      p.next = node;
+    }
+    length += 1;
+  };
+
+  this.insert = function (position, element) {
+    let node = new Node(element);
+    if (position >= 0 && position <= length) {
+      let prev = head;
+      let cur = head;
+      let index = 0;
+      if (position === 0) {
+        node.next = head;
+        head = node;
+      } else {
+        while (index < position) {
+          prev = cur;
+          cur = cur.next;
+          index++;
+        }
+        prev.next = node;
+        node.next = cur;
+      }
+      length += 1;
+    } else {
+      return null;
+    }
+  };
+
+  this.remove = function (element) {
+    let p = head;
+    let prev = head;
+    while (p) {
+      if (p.element === element) {
+        p = p.next;
+        prev.next = p;
+      } else {
+        prev = p;
+        p = p.next;
+      }
+    }
+  };
+
+  this.isEmpty = function () {};
+
+  this.size = function () {};
+}
+
+// 双链表
+function DoublyLinkedList() {
+  let Node = function (ele) {
+    this.element = ele;
+    this.prev = null;
+    this.next = null;
+  };
+  let head = null;
+  let tail = null;
+  let length = 0;
+
+  this.insert = function (position, element) {
+    let node = new Node(element);
+    if (position >= 0 && position < length) {
+      let prev = head;
+      let cur = head;
+      let index = 0;
+      if (position === 0) {
+        if (!head) {
+          head = node;
+          tail = node;
+        } else {
+          node.next = head;
+          head.prev = node;
+          head = node;
+        }
+      } else if (position === length) {
+        cur = tail;
+        cur.prev = node;
+        head = node;
+      } else if (position === length) {
+        cur = tail;
+        cur.next = head;
+        head = node;
+      } else {
+        while (index < position) {
+          prev = cur;
+          cur = cur.next;
+          index++;
+        }
+        prev.next = node;
+        node.next = cur;
+        cur.prev = node;
+        node.prev = prev;
+      }
+      length += 1;
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  this.removeAt = function (position) {
+    if (position >= 0 && position < length && length > 0) {
+      let prev = head;
+      let cur = head;
+      let index = 0;
+      if (position === 0) {
+        // 移除头节点
+        if (length === 1) {
+          head = null;
+          tail = null;
+        } else {
+          head = head.next;
+          head.prev = null;
+        }
+      } else if (position === length - 1) {
+        cur = tail;
+        tail = cur.prev;
+        tail.next = null;
+      } else {
+        while (index < position) {
+          prev = cur;
+          cur = cur.next;
+          index++;
+        }
+        prev.next = cur.next;
+        cur.next.pre = prev;
+      }
+      length -= 1;
+      return cur.element;
+    } else {
+      return null;
+    }
+  };
+
+  this.isEmpty = function () {
+    return length === 0;
+  };
+
+  this.size = function () {
+    return length;
+  };
+}
+
+// 循环单链表
+function CircularLinkedList() {
+  let Node = function (element) {
+    this.element = element;
+    // 后继指针
+    this.next = null;
+  };
+  // 初始头节点为 null
+  let head = null;
+
+  // 链表长度
+  let length = 0;
+  // 操作
+  this.search = function (element) {
+    if (!head) return false;
+    let p = head;
+    let index = 0;
+    while (index++ < length) {
+      if (p.element === element) return true;
+      p = p.next;
+    }
+    return false;
+  };
+
+  this.insert = function (positon, element) {
+    let node = new Node(element);
+    if (positon >= 0 && positon <= length) {
+      let prev = head;
+      let cur = head;
+      let index = 0;
+      if (positon === 0) {
+        while (index < length) {
+          prev = cur;
+          cur = cur.next;
+          index++;
+        }
+        prev.next = node;
+        node.next = cur;
+        head = node;
+      } else {
+        while (index < positon) {
+          prev = cur;
+          cur = cur.next;
+          index++;
+        }
+        prev.next = node;
+        node.next = cur;
+      }
+      length += 1;
+    } else {
+      return null;
+    }
+  };
+
+  this.remove = function (element) {
+    let p = head;
+    let prev = head;
+    let index = 0;
+    if (!head) return;
+    if (length === 1 && head.element === element) {
+      head = null;
+      length--;
+      return;
+    }
+    while (index++ < length) {
+      if (p.element === element) {
+        p = p.next;
+        prev.next = p;
+        length--;
+      } else {
+        prev = p;
+        p = p.next;
+      }
+    }
+  };
+  this.isEmpty = function () {
+    return length === 0;
+  };
+  this.size = function () {
+    return length;
+  };
+}
+
+// 合并两个有序链表
+// 将两个升序链表合并为一个新的升序链表并返回，新链表是用过拼接给定的两个链表的所有节点组成的
+// 示例：
+/**
+ * 输入 1 > 2 > 3, 1 > 3 > 4
+ * 输出 1 > 1 > 2 > 3 > 4 > 4
+ */
+
+/**
+ * 方案1
+ * 抽取两个链表中的所有数据进入数组, 排序后再转为链表
+ */
+
+function mergeLinkedList(list1, list2) {
+  // 抽取数据
+  const arr1 = extractData(list1);
+  const arr2 = extractData(list2);
+
+  // 排序
+  const result = [...arr1, arr2].sort((a, b) => a - b);
+
+  // 将结果数组转换成链表
+  return toLinkedList(result);
+}
+
+function Node(ele: any): Node {
+  return {
+    next: null,
+    element: ele
+  };
+}
+
+function extractData(head: any) {
+  let arr = [];
+  let cur = head;
+  while (cur) {
+    arr.push(cur.element);
+    cur = cur.next;
+  }
+  return arr;
+}
+
+function toLinkedList<T>(arr: Array<T>): LinkedList {
+  if (arr.length === 0) {
+    return null;
+  } else {
+    const linkedArr = arr.map(d => Node(d));
+    const linkedList: LinkedList = {
+      head: null,
+      size: 0
+    };
+    let head = null;
+    let index = 0;
+    const result = linkedArr.reduce((pre, cur) => {
+      if (!pre) {
+        pre = cur;
+        head = pre;
+      } else {
+        pre.next = cur;
+        pre = cur;
+      }
+      index++;
+      return pre;
+    }, null);
+    linkedList.head = head;
+    linkedList.size = index;
+    return linkedList;
+  }
+}
+
+interface Node {
+  element: any;
+  next: Node;
+}
+
+interface LinkedList {
+  size: number;
+  head: Node;
+}
+
+/**
+ * 方案2
+ * 基于两个链表都为有序链表, 可以进行逐级对比
+ */
+
+/**
+ *
+ * @param list1 head
+ * @param list2 head
+ */
+function mergeOrderLinkedList(list1: Node, list2: Node) {
+  if (!list1.element) {
+    return list2.element;
+  }
+  if (!list2.element) {
+    return list1.element;
+  }
+
+  if (list1.element < list2.element) {
+    list1.next = mergeOrderLinkedList(list1.next, list2);
+    return list1;
+  } else {
+    list2.next = mergeOrderLinkedList(list2.next, list1);
+    return list2;
+  }
+}
+
+class MinStack {
+  min: number;
+  stack: number[] = [];
+
+  push(val: number) {
+    this.stack.push(val);
+    this.min = Math.min(...this.stack);
+  }
+
+  pop() {
+    this.min = Math.min(...this.stack);
+    return this.stack.pop();
+  }
+
+  top() {
+    return this.stack[this.stack.length - 1]
+  }
+
+  getMin() {
+    return this.min;
+  }
+}
+
+
+// 滑动窗口最大值问题
+/**
+ * 给定一个数组nums和滑动窗口的大小k, 请找出所有滑动窗口里的最大值
+ * 示例:
+ * 输入 nums = [1, 3, -1, -3, 5, 3, 6, 7], 和 k = 3
+ * 输出 [3, 3, 5, 5, 6, 7]
+ */
+
+ /** 
+  * 方案1 对数组做切片求最大值
+  */
+
+  function maxSlidingWindow(nums: number[], k: number) {
+    const result = [];
+    for (var i = 0; i < nums.length - k + 1; i ++) {
+      const arr = nums.slice(i, i + k);
+      result.push(Math.max(...arr));
+    }
+    return result;
+  }
