@@ -1568,14 +1568,13 @@ class MinStack {
   }
 
   top() {
-    return this.stack[this.stack.length - 1]
+    return this.stack[this.stack.length - 1];
   }
 
   getMin() {
     return this.min;
   }
 }
-
 
 // 滑动窗口最大值问题
 /**
@@ -1585,15 +1584,125 @@ class MinStack {
  * 输出 [3, 3, 5, 5, 6, 7]
  */
 
- /** 
-  * 方案1 对数组做切片求最大值
-  */
+/**
+ * 方案1 对数组做切片求最大值
+ */
 
-  function maxSlidingWindow(nums: number[], k: number) {
-    const result = [];
-    for (var i = 0; i < nums.length - k + 1; i ++) {
-      const arr = nums.slice(i, i + k);
-      result.push(Math.max(...arr));
-    }
-    return result;
+function maxSlidingWindow(nums: number[], k: number) {
+  const result = [];
+  for (var i = 0; i < nums.length - k + 1; i++) {
+    const arr = nums.slice(i, i + k);
+    result.push(Math.max(...arr));
   }
+  return result;
+}
+
+// 求多个数组的交集
+
+var arr1 = [1, 2, 3, 4, 5];
+var arr2 = [3, 4, 5, 6, 7];
+var arr3 = [5, 6, 7, 8, 9];
+
+function intersection(...arr: [number[]]) {
+  var ret = [];
+  var set = new Set();
+  var result = [];
+  arr.map(d => {
+    ret = ret.concat(d);
+  });
+  ret.map((d: number) => {
+    if (set.has(d) && !result.includes(d)) {
+      result.push(d);
+    }
+    set.add(d);
+  });
+  return result;
+}
+
+function f(n) {
+  const cache = [];
+  /**
+   * @param amount 剩余的总价
+   * min: 最小的总钱数
+   * 返回min值
+   */
+  function makeChange(amount) {
+    if (amount < 0) return 0;
+
+    // 校验是否已经计算过
+    if (cache[amount]) return cache[amount];
+
+    let min = Infinity;
+    if (amount >= 1) {
+      min = Math.min(makeChange(amount - 1) + 1, min);
+    }
+
+    if (amount >= 5) {
+      min = Math.min(makeChange(amount - 5) + 1, min);
+    }
+
+    if (amount >= 11) {
+      min = Math.min(makeChange(amount - 11) + 1, min);
+    }
+
+    /**
+     * amount = 15
+     * Math.min(makeChange(14) + 1, Infinity) ==> makeChange(14) + 1
+     *
+     *
+     * makeChange(10)
+     *
+     *
+     * makeChange(4)
+     *
+     *
+     */
+
+    return (cache[amount] = min);
+  }
+  return makeChange(n);
+}
+
+var waysToChange = function (n) {
+  const cache = [];
+  
+  function change(amount) { // 10
+    let count = 0;
+    if (cache[amount]) return cache[amount];
+
+    if (amount >= 1) {
+      count += change(amount - 1); // 1
+    }
+
+    if (amount >= 5) {
+      count += change(amount - 5); // 5
+    }
+
+    if (amount >= 10) {
+      count += change(amount - 10); // + 1
+    }
+
+    if (amount >= 25) {
+      count += change(amount - 25);
+    }
+
+    if (amount === 0) {
+      count++;
+    }
+    return (count[amount] = count);
+  }
+  return change(n);
+};
+
+/**
+ * change(5)
+ * change(4)
+ * change(3)
+ * change(2)
+ * change(1)
+ * change(0) ++
+ * 
+ * change(0) ++
+ * 
+ * return 1;
+ */
