@@ -82,3 +82,9 @@ export default class MVue {
  * 数据变化影响视图更新，视图交互影响数据更新的双向绑定的效果
  * 
  */
+
+// var str = 'jjj_rr-ee-qq_das';
+
+// var arr = str.split('-').map(d => d.split('_')).flat(2);
+
+// arr.map(d => d[0].toUpperCase() + d.slice(1).toLowerCase()).join('');

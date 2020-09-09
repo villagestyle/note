@@ -1665,8 +1665,9 @@ function f(n) {
 
 var waysToChange = function (n) {
   const cache = [];
-  
-  function change(amount) { // 10
+
+  function change(amount) {
+    // 10
     let count = 0;
     if (cache[amount]) return cache[amount];
 
@@ -1701,8 +1702,119 @@ var waysToChange = function (n) {
  * change(2)
  * change(1)
  * change(0) ++
- * 
+ *
  * change(0) ++
- * 
+ *
  * return 1;
+ */
+
+var str = "[()]";
+
+var isValid = function (s: string) {
+  var arr = [];
+  for (var i = 0; i < s.length; i++) {
+    switch (s[i]) {
+      case "[":
+        arr.push("]");
+        break;
+      case "(":
+        arr.push(")");
+        break;
+      case "{":
+        arr.push("}");
+        break;
+      case ")": {
+        if (arr.pop() !== "(") return false;
+        break;
+      }
+      case "]": {
+        if (arr.pop() !== "[") return false;
+        break;
+      }
+      case "}": {
+        if (arr.pop() !== "{") return false;
+        break;
+      }
+    }
+  }
+  return !arr.length;
+};
+
+// [
+//   {
+//     id: '',
+//     userId: '',
+//     songSheet: [
+//       {
+//         id: '',
+//         name: '',
+//         songs: []
+//       },
+//       {
+//         id: '',
+//         name: '',
+//         songs: []
+//       }
+//     ]
+//   }
+// ]
+
+[
+  {
+    id: '',
+    userId: '',
+    assess_token: '',
+    refresh_token: ''
+  }
+]
+
+// 链表
+interface HooK {
+  queue: Queue;
+  next: HooK;
+}
+
+interface Queue {
+  dispatch: any;
+  last: Update; // update链表的head
+}
+
+// 环状链表结构
+interface Update {
+  action: any; // 动作
+  next: Update;
+}
+
+interface Com {
+  // 设置setState('') setState(0)
+  hook: HooK // hook链表的head
+}
+
+/**
+ * 碰到useState('')怎么解析
+ * 
+ * 生成空hook对象
+ * 判断hook链表是否生成
+ * 
+ * 以存在就接入到上个hook对象的next里
+ * 不存在就把当前hook对象作为hook链表的head
+ * 
+ * 获取初始值 => 判断初始值类型
+ * 
+ * 初始值类型为Function => val = fn()
+ * val = val
+ * 
+ * 添加queue更新队列
+ * key = value
+ * 
+ * 添加dispatch方法
+ * 
+ * 如何添加dispatch方法
+ * 绑定dispatchAction方法, 预注入fiber对象和Hook.queue对象
+ * 
+ * 如何预注入
+ * const dispatch = dispatchAction.bind(null, fiber, Hook.queue);
+ * dispatchAction: (fiber, queue, action) => void
+ * 
+ * 返回[initialValue, dispatch]
  */
