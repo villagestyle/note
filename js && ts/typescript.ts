@@ -1812,9 +1812,30 @@ interface Com {
  * 如何添加dispatch方法
  * 绑定dispatchAction方法, 预注入fiber对象和Hook.queue对象
  * 
+ * dispatchAction的功能是?
+ * 初始化更新队列queue.update
+ * 
  * 如何预注入
  * const dispatch = dispatchAction.bind(null, fiber, Hook.queue);
  * dispatchAction: (fiber, queue, action) => void
  * 
  * 返回[initialValue, dispatch]
  */
+
+//  enum Direction {
+//    North,
+//    South,
+//    East,
+//    West
+//  }
+
+//  const enumxx: Direction = Direction.East;
+//  var dir: string[] = ['2'];
+
+//  console.log(dir[enumxx])
+
+// var unknow: unknown;
+
+// String.toString.call(null, unknow);
+
+// window.history.replaceState
