@@ -43,3 +43,18 @@
 
 
 // 动态规划
+/**
+ * @param {number} n
+ * @return {number}
+ */
+
+var waysToStep = function(n) {
+
+    const DP = [0, 1, 2, 4];
+
+    for (var i = 4; i <= n; i ++) {
+        DP[i] = (DP[i-1] + DP[i-2] + DP[i-3]) % 1000000007;
+    }
+
+    return DP[n]
+};
