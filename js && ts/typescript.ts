@@ -1839,3 +1839,10 @@ interface Com {
 // String.toString.call(null, unknow);
 
 // window.history.replaceState
+
+const video = document.createElement('video');
+
+var str = '这 不错 哦'
+var reg = new RegExp(`[${str.split(' ').join('|')}]`, 'gi')
+var str = '不错----这+++哦***';
+str.replace(reg, '');

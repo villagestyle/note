@@ -13,6 +13,7 @@
 
     输入：["a","b","ba","bca","bda","bdca"]
     输出：4
+
     解释：最长单词链之一为 "a","ba","bda","bdca"。
 
     提示：
@@ -22,10 +23,51 @@
     words[i] 仅由小写英文字母组成。
  */
 
+const isExistStr = (str: string, str2: string) => {
+  const arr1 = str.split("");
+  const arr2 = str2.split("");
+  let result = false;
+
+  arr1.forEach(item => {
+    if (!arr2.includes(item)) {
+      result = false;
+    }
+  });
+
+  return result;
+};
+
 /**
  * @param {string[]} words
  * @return {number}
  */
 var longestStrChain = function (words: string[]) {
-   
+  // 按长度排序
+  const sortArr = words.sort((a, b) => a.length - b.length);
+  const len = sortArr.length + 1;
+  const arr = Array.from(new Array(len), () => new Array(len).fill(0));
+
+  for (let i = 1; i < len; i++) {
+    for (let j = 1; j < len; j++) {
+      let cur = sortArr[i - 1];
+      if (cur === sortArr[j - 1]) {
+        arr[i][j] = 1;
+      } else {
+        // 判断是否为单词链
+        if (
+          cur.length === sortArr[j - 1].length - 1 &&
+          isExistStr(cur, sortArr[j - 1])
+        ) {
+          arr[i][j] = arr[i - 1][j] + 1;
+          cur = sortArr[j - 1];
+        } else {
+         arr[i][j] = arr[i - 1][j];
+        }
+      }
+    }
+  }
+
+  return Math.max(...arr[len - 1]);
 };
+
+longestStrChain(["ca", "a"]);
