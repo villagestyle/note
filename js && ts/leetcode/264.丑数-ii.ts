@@ -6,28 +6,29 @@
 
 // @lc code=start
 function nthUglyNumber(n: number): number {
-  const arr = Array.from(new Array(n + 1), () => new Array(3).fill(0));
-  arr[1] = [1, 1, 1];
-
-  for (let i = 2; i <= n; i++) {
-    for (let j = 0; j < 3; j++) {
-      if (arr[i][j - 1]) {
-        arr[i][j] = arr[i][j - 1];
-      } else {
-        const remainder = i % [2, 3, 5][j];
-        if (remainder !== 0) {
-          arr[i][j] = 0;
-        } else {
-          arr[i][j] = arr[i / [2, 3, 5][j]][j];
-        }
-      }
-      if (j === 2 && arr[i][2]) {
-        arr[i][2] = i;
-      }
+  // 三指针法
+  // 丑数 = 丑数 * 2 || 3 || 5
+  const arr = [1];
+  let num1 = 1;
+  let num2 = 1;
+  let num3 = 1;
+  for (let i = 1; i < n; i++) {
+    const res1 = arr[num1 - 1] * 2;
+    const res2 = arr[num2 - 1] * 3;
+    const res3 = arr[num3 - 1] * 5;
+    const min = Math.min(res1, res2, res3);
+    arr.push(min);
+    if (min === res3) {
+      num3++;
+    }
+    if (min === res2) {
+      num2++;
+    }
+    if (min === res1) {
+      num1++;
     }
   }
 
-  console.log(arr);
-  return arr[n][2];
+  return arr[n - 1];
 }
 // @lc code=end
